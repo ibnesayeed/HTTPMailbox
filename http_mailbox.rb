@@ -70,13 +70,14 @@ get '/hm/*' do
       last = @fi.get "/about/#{CGI.escape msg["recipient"]}/#{@basens}last"
       @last = last.value if last.status == 200
 
-      cp = "<#{@hmurl + msg["recipient"].gsub(" ", "+")}>; rel=\"current\""
-      fp = "<#{@hmurl}id/#{@first}>; rel=\"first#{" self" if @first == @guid}\"" unless @first.nil?
-      lp = "<#{@hmurl}id/#{@last}>; rel=\"last#{" self" if @last == @guid}\"" unless @last.nil?
-      np = "<#{@hmurl}id/#{msg["next"]}>; rel=\"next\"" unless msg["next"].nil?
-      pp = "<#{@hmurl}id/#{msg["previous"]}>; rel=\"previous\"" unless msg["previous"].nil?
+      cp = "<#{@msurl + msg["recipient"].gsub(" ", "+")}>; rel=\"current\""
+      sp = "<#{@msurl}id/#{@guid}>; rel=\"self\""
+      fp = "<#{@msurl}id/#{@first}>; rel=\"first\"" unless @first.nil?
+      lp = "<#{@msurl}id/#{@last}>; rel=\"last\"" unless @last.nil?
+      np = "<#{@msurl}id/#{msg["next"]}>; rel=\"next\"" unless msg["next"].nil?
+      pp = "<#{@msurl}id/#{msg["previous"]}>; rel=\"previous\"" unless msg["previous"].nil?
 
-      links = [cp, fp, lp, np, pp].compact.join(", ")
+      links = [cp, sp, fp, lp, np, pp].compact.join(", ")
 
       headers "Date" => Time.now.httpdate,
               "Memento-Datetime" => msg["mementodatetime"],
